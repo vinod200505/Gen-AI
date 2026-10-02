@@ -1,0 +1,17 @@
+# Virtual environment
+env/
+venv/
+.venv/
+
+# API keys / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/

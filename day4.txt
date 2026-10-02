@@ -1,0 +1,46 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+//---------------------------------------------------------------------------
+
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI(model="gpt-4o-mini-2024-07-18")
+res = llm.invoke("Who is Virat Kohli")
+res.content
+
+//---------------------------------------------------------------------------
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+llm = ChatGoogleGenerativeAI(model="gemini-3.8-flash")
+res = llm.invoke("Who is Virat Kohli")
+res.content
+
+//---------------------------------------------------------------------------
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+
+llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash")
+out = StrOutputParser()
+
+def transform_case(result :str):
+    return result.upper()
+
+prompts = ChatPromptTemplate.from_messages([
+    {"role": "system", "content": "you are a translator and translate input in {language}"},
+    {"role": "user", "content": "{query}"}
+])
+
+#final_prompt = prompts.format_prompt(language="Python", shape="pyramid")
+
+#res = llm.invoke(final_prompt)
+
+chain = prompts | llm | out | transform_case
+
+res = chain.invoke({"language": "Hinglish", "query": "Hello, how are you?"})
+
+print(res)
+
+//---------------------------------------------------------------------------
+
