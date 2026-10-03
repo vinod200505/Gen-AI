@@ -4,4 +4,4 @@ dotenv
 langchain[anthropic]
 langchain[google-genai]
 langchain-ollama
-
+streamlit

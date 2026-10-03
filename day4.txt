@@ -1,3 +1,21 @@
+text = "Who is Pm of India ?"
+
+import tiktoken
+
+tokenizer = tiktoken.encoding_for_model(model_name="gpt-4")
+tokenIds = tokenizer.encode(text)
+tokenIds
+
+// output : [15546, 374, 393, 76, 315, 6890, 949]
+
+resultIds = [15546, 393, 76, 315, 6890, 949]
+result = tokenizer.decode(resultIds)
+result
+
+// output : Who is Pm of India ?
+
+//---------------------------------------------------------------------------
+
 from dotenv import load_dotenv
 load_dotenv()
 
