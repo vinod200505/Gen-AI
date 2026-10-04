@@ -62,3 +62,66 @@ print(res)
 
 //---------------------------------------------------------------------------
 
+// strectured_llm
+
+from dotenv import load_dotenv
+load_dotenv()  # take environment variables from .env.
+
+from langchain_google_genai import ChatGoogleGenerativeAI
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+
+text = "Hello, My name is Vinod Rathod," \
+"Email is vinodrathod@gmail.com"
+
+res = llm.invoke(f"Please give me only name , email and age from the text {text}")
+print(res.text)
+
+# output : Name: Vinod Rathod
+           Email: vinodrathod@gmail.com
+           Age: Not provided
+
+
+from pydantic import BaseModel, Field
+class ResponseStrecture(BaseModel):
+    name:str = Field(description="Complete name")
+    email:str = Field(description="Email address")
+    age:int = Field(description="Age of the person")
+
+strectured_llm = llm.with_structured_output(ResponseStrecture)
+
+res = strectured_llm.invoke(f"Please give me only name , email and age from the text {text}")
+
+res.model_dump()
+
+# output : {'name': 'Vinod Rathod', 'email': 'vinodrathod@gmail.com', 'age': 0}
+
+class Movies(BaseModel):
+    title:str = Field(description="Movie title")
+    year:int = Field(description="Release year")
+
+class AllMovies(BaseModel):
+    movies:List[Movies] 
+
+movies_llm = llm.with_structured_output(AllMovies)
+
+res = movies_llm.invoke("Give me three movies")
+
+#  output : {'movies': [
+        {'title': 'Inception', 'year': 2010}, 
+        {'title': 'The Shawshank Redemption', 'year': 1994}, 
+        {'title': 'The Godfather', 'year': 1972}
+#  ]}
+
+//-----------------------------------------------------------------------------------------------------
+
+Ollama Models
+
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(model="gemma3:1b")
+
+res = llm.invoke("Hello, how are you?")
+
+print(res.content)
+
+//---------------------------------------------------------------------------------------------------------
