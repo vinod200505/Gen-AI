@@ -6,3 +6,5 @@ langchain[google-genai]
 langchain-ollama
 streamlit
 langchain-groq
+
+langchain_google_community
