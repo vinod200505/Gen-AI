@@ -3,17 +3,18 @@ load_dotenv()
 
 from langchain_groq import ChatGroq
 from langchain.agents import create_agent
-#from langchain_google_community import GoogleSerperAPIWrapper
 from langchain_community.utilities import GoogleSerperAPIWrapper
-
-from langchain_core.tools import Tool
+from langgraph.checkpoint.memory import MemorySaver
 
 model = ChatGroq(model="openai/gpt-oss-20b")
 search = GoogleSerperAPIWrapper()
+memory = MemorySaver()
+#thread_config = {"configurable": {"thread_id": "1"}}
 
 agent = create_agent(
     model = model,
     tools = [search.run],
+    checkpointer= memory,
     system_prompt="You are a agent and can search for any question on google."
 )
 
@@ -28,10 +29,41 @@ while True:
    # response = agent.invoke({"message":[{"role":"user", "content": query}]})
 
     response = agent.invoke({
-        "messages": [("user", query)]
-    })
+        "messages": [("user", query)]},
+        {"configurable": {"thread_id": "asd1234"}}
+    )
 
     print("AI:", response["messages"][-1].content)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #--------------------------------------------------------------------------------
 
