@@ -23,7 +23,7 @@ while True:
     query = input("User: ")
 
     if query.lower() in ["quiet", "exit"]:
-        print("GoodBye...")
+        print("Good-Bye...")
         break
 
    # response = agent.invoke({"message":[{"role":"user", "content": query}]})
@@ -34,6 +34,15 @@ while True:
     )
 
     print("AI:", response["messages"][-1].content)
+
+
+
+
+
+
+
+
+
 
 
 
