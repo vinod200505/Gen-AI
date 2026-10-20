@@ -13,3 +13,4 @@ beautifulsoup4
 wikipedia
 Wikipedia
 langchain-text-splitters
+langchain-chroma
