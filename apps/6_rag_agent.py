@@ -73,34 +73,43 @@ def process_document(path):
     st.session_state.document_uploaded = True
 
     ## upload UI
-    if not st.session_state.document_uploaded:
-        uploaded = st.file_uploader(
-            label="Select PDF Files",
-            type=["pdf"],
-            accept_multiple_files=True
+if not st.session_state.document_uploaded:
+    uploaded = st.file_uploader(
+        label="Select PDF Files",
+        type=["pdf"],
+        accept_multiple_files=True
         )
-        if uploaded:
-            with st.spinner("Processing..."):
-                path = "./doc_files/"
-                for file in uploaded:
-                    with open(path + file.name, "wb") as f:
-                        f.write(file.getvalue())
+    if uploaded:
+        with st.spinner("Processing..."):
+            path = "./doc_files/"
+            for file in uploaded:
+                with open(path + file.name, "wb") as f:
+                    f.write(file.getvalue())
 
-                process_document(path)
-                st.rerun()        
+            process_document(path)
+            st.rerun()        
 
 ## chat UI
 
 if st.session_state.document_uploaded and st.session_state.agent:
+    for message in st.session_state.messages:
+        role = message.get("role")
+        content = message.get("content")
+        st.chat_message(role).markdown(content)
+
     query = st.chat_input("Ask anything related to uploaded documents...")
     if query:
+        st.session_state.messages.append({"role":"user", "content":query})
+
         st.chat_message("user").markdown(query)
-        response = st.session_state.agent(
-            {"messages":[{"role":"user", "content":query}]}
+        response = st.session_state.agent.invoke(
+            {"messages":[{"role":"user", "content":query}]},
+            {"configurable":{"thread_id":1}}
         )
 
         answer = response["messages"][-1].content
         st.chat_message("ai").markdown(answer)
+        st.session_state.messages.append({"role":"ai", "content":query})
 
 
 
